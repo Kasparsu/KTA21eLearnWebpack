@@ -1,8 +1,1 @@
-$primary: orange;
-
-@import '~bootstrap';
-
-$bgcolor: lightblue;
-body {
-    background-color: darken($bgcolor, 30%);
-}
+@import '~bulma';

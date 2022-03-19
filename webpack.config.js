@@ -1,8 +1,10 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
 const glob = require('glob');
+const webpack = require('webpack');
 // // make a array with pages names
 // let pages = ['cat1', 'cat2', 'cat3', 'dog1', 'dog2', 'dog3'];
 // // map a new HtmlWebpackPlugin to each of those names outputing array
@@ -46,27 +48,30 @@ module.exports = {
       {
         test: /\.twig$/i,
         use: "twig-loader",
-        
+      },
+      {
+        test: /\.vue$/i,
+        use: "vue-loader",
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Home page',
-      template: './src/index.twig',
-      templateParameters: {
-        title: 'hello'
-      }
+      template: './src/index.html',
     }),
-    new HtmlWebpackPlugin({
-      title: 'About us',
-      filename: 'about.html',
-      template: './src/about.twig'
-    }),
-    //...htmlPlugins, // spread operation spreading array into existing array
     new MiniCssExtractPlugin(),
-    new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
-    }),
+    // new PurgecssPlugin({
+    //   paths: glob.sync(`${PATHS.src}/**/*`,  { nodir: true }),
+    // }),
+    new VueLoaderPlugin(),
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: true
+    })
   ],
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.esm-bundler.js',
+    },
+  },
 };
